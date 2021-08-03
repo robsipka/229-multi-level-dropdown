@@ -51,13 +51,20 @@ function DropdownMenu() {
   const [activeMenu, setActiveMenu] = useState('main');
   const [menuHeight, setMenuHeight] = useState(null);
   const dropdownRef = useRef(null);
+  const primaryRef = useRef(null)
+  const secondaryRef = useRef(null)
 
   useEffect(() => {
     setMenuHeight(dropdownRef.current?.firstChild.offsetHeight)
   }, [])
 
-  function calcHeight(el) {
-    const height = el.offsetHeight;
+  function calcPrimaryHeight() {
+    const height = primaryRef.current.offsetHeight;
+    setMenuHeight(height);
+  }
+
+  function calcSecondaryHeight() {
+    const height = secondaryRef.current.offsetHeight;
     setMenuHeight(height);
   }
 
@@ -75,12 +82,13 @@ function DropdownMenu() {
     <div className="dropdown" style={{ height: menuHeight }} ref={dropdownRef}>
 
       <CSSTransition
+        nodeRef={primaryRef}
         in={activeMenu === 'main'}
         timeout={500}
         classNames="menu-primary"
         unmountOnExit
-        onEnter={calcHeight}>
-        <div className="menu">
+        onEnter={calcPrimaryHeight}>
+        <div className="menu" ref={primaryRef}>
           <DropdownItem>My Profile</DropdownItem>
           <DropdownItem
             leftIcon={<CogIcon />}
@@ -99,12 +107,13 @@ function DropdownMenu() {
       </CSSTransition>
 
       <CSSTransition
+        nodeRef={secondaryRef}
         in={activeMenu === 'settings'}
         timeout={500}
         classNames="menu-secondary"
         unmountOnExit
-        onEnter={calcHeight}>
-        <div className="menu">
+        onEnter={calcSecondaryHeight}>
+        <div className="menu" ref={secondaryRef}>
           <DropdownItem goToMenu="main" leftIcon={<ArrowIcon />}>
             <h2>My Tutorial</h2>
           </DropdownItem>
@@ -116,12 +125,13 @@ function DropdownMenu() {
       </CSSTransition>
 
       <CSSTransition
+        nodeRef={secondaryRef}
         in={activeMenu === 'animals'}
         timeout={500}
         classNames="menu-secondary"
         unmountOnExit
-        onEnter={calcHeight}>
-        <div className="menu">
+        onEnter={calcSecondaryHeight}>
+        <div className="menu" ref={secondaryRef}>
           <DropdownItem goToMenu="main" leftIcon={<ArrowIcon />}>
             <h2>Animals</h2>
           </DropdownItem>
